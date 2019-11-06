@@ -5,12 +5,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.time.format.DateTimeFormatter.ISO_TIME;
 
 public class TcpServer {
     public static final int SERVER_PORT = 12345;
     public static final int BUFFER_SIZE = 256;
 
     private int port;
+    //    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(ISO_LOCAL_DATE);
+    DateTimeFormatter dateFormatter = ISO_LOCAL_DATE;
+    DateTimeFormatter timeFormatter = ISO_TIME;
 
     public TcpServer() {
         this(SERVER_PORT);
@@ -37,10 +46,12 @@ public class TcpServer {
                     break;
                 }
                 String msg = new String(buf, 0, length);
-                System.out.println("Client sent a message: " + msg);
-
-                String reply = msg.toUpperCase();
-                out.write(reply.getBytes());
+                System.out.println("Client requested: " + msg);
+                if ("date".equalsIgnoreCase(msg)) {
+                    out.write(LocalDate.now().format(dateFormatter).getBytes());
+                } else if ("time".equalsIgnoreCase(msg)) {
+                    out.write(LocalDateTime.now().format(timeFormatter).getBytes());
+                }
             }
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
