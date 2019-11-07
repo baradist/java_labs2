@@ -4,12 +4,14 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.Callable;
 
 public class DateTimeImpl extends UnicastRemoteObject implements DateTime {
+    private Callable<Void> stopCallback;
+
     DateTimeImpl() throws RemoteException {
         System.out.println("DateTimeImpl created");
     }
-
 
     @Override
     public void close() {
@@ -28,6 +30,15 @@ public class DateTimeImpl extends UnicastRemoteObject implements DateTime {
 
     @Override
     public boolean stop() throws RemoteException {
-        return false; // TODO: stop rmi-server, remove itself from the registry
+        try {
+            stopCallback.call();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void addStopCallback(Callable<Void> stopCallback) throws Exception {
+        this.stopCallback = stopCallback;
     }
 }

@@ -16,6 +16,7 @@ public class RmiClient {
 
             System.out.println("Now is: " + stub.getDate() + ", " + stub.getTime());
 
+            System.out.println("Server disconnected: " + stub.stop());
         } catch (RemoteException | NotBoundException e) {
             System.out.println(e.getMessage());
         }
