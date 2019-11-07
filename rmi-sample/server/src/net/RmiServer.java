@@ -8,7 +8,7 @@ import static net.Constatns.SERVER_PORT;
 
 public class RmiServer {
     public static void main(String[] args) {
-        try (RmiInterface stub = new ServerObject()) {
+        try (DateTime stub = new DateTimeImpl()) {
             Registry registry = LocateRegistry.createRegistry(SERVER_PORT);
             registry.bind(JNDI_OBJECT_NAME, stub);
         } catch (Exception e) {

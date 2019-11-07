@@ -12,9 +12,9 @@ public class RmiClient {
     public static void main(String[] args) {
         try {
             Registry registry = LocateRegistry.getRegistry(SERVER_PORT);
-            RmiInterface stub = (RmiInterface) registry.lookup(JNDI_OBJECT_NAME);
+            DateTime stub = (DateTime) registry.lookup(JNDI_OBJECT_NAME);
 
-            System.out.println("Sum: " + stub.sum(100, 46));
+            System.out.println("Now is: " + stub.getDate() + ", " + stub.getTime());
 
         } catch (RemoteException | NotBoundException e) {
             System.out.println(e.getMessage());
